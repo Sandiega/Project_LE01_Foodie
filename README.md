@@ -17,10 +17,11 @@ Website Untuk Pesan makanan Online di restaurant kami.
 ## Link Youtube
 
 ## Role Website
---Admin <br>
+-- Admin <br>
 Email : admin@gmail.com
 <br>
 Password : admin123
 <br>
 
-
+-- Customer <br>
+Untuk customer harap untuk register terlebih dahulu.
