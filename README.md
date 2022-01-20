@@ -8,10 +8,12 @@
 </p>
 
 ## About Foodie
+Website Untuk Pesan makanan Online di restaurant kami.
+<br>
 Nama : Sandiega Sutoko
 <br>
 NIM : 2301895416
-Website Untuk Pesan makanan Online di restaurant kami.
+
 
 
 ## Link Youtube
