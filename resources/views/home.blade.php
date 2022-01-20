@@ -37,11 +37,11 @@
                     @forelse($data as $d)
                     <tr>
                         <td>
-                         {{$d->makanan->nama_makanan}}
+                         {{$d->nama_makanan}}
                         </td>
 
                         <td>
-                            {{ $d->makanan->harga}}
+                            {{ $d->harga}}
                         </td>
                         <td>
 
@@ -100,7 +100,7 @@
                         </td>
 
                         <td>
-                            {{$d->makanan->nama_makanan}}
+                            {{$d->nama_makanan}}
                         </td>
                         <td>
                             {{ $d->quantity}}

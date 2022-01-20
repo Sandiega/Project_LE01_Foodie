@@ -18,6 +18,8 @@ class Transaksi extends Migration
             $table->foreignid('makanan_id')->references('id')->on('menu_makanan');
             $table->foreignid('user_id')->references('id')->on('users');
             $table->integer('quantity');
+            $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Transaksi;
 
 class PageController extends Controller
 {
@@ -17,26 +18,28 @@ class PageController extends Controller
         $id_now=Auth::user()->id;
         if(Auth::user()->level==0){
             $data = transaksi_model::join('menu_makanan','menu_makanan.id','transaksi.makanan_id')
-            ->join('users','transaksi.user_id','users.id')
-            ->where('users.id','=',$id_now)
-            ->get(['transaksi.id','transaksi.quantity','menu_makanan.nama_makanan','menu_makanan.harga']);
+            ->where('transaksi.user_id','=',$id_now)
+            ->select('transaksi.id','transaksi.quantity','menu_makanan.nama_makanan','menu_makanan.harga')
+            ->simplepaginate(3);
+            // dd($data);
         }
-        else{
+        else if(Auth::user()->level==1){
             $data = transaksi_model::join('menu_makanan','menu_makanan.id','transaksi.makanan_id')
             ->join('users','transaksi.user_id','users.id')
-            ->get(['transaksi.id','transaksi.quantity','menu_makanan.nama_makanan','menu_makanan.harga','users.name','transaksi.user_id']);
+            ->select('transaksi.id','transaksi.quantity','menu_makanan.nama_makanan','menu_makanan.harga','users.name','transaksi.user_id')
+            ->simplepaginate(3);
         }
 
 
 
 
 
-         return view('home', ['data'=>transaksi_model::simplepaginate(5)]);
+         return view('home', ['data'=>$data]);
 
     }
 
     public function hapus($id){
-        DB::table('transaksi')->where('id',$id)->delete();
+        transaksi_model::where('transaksi.id','=',$id)->forcedelete();
 
 
         return redirect('/home');
@@ -70,6 +73,7 @@ class PageController extends Controller
 
         $trans = DB::table('transaksi')->where('user_id',$id_now)->get();
 
+
         foreach($trans as $t){
             if($t->makanan_id == $id){
                 DB::table('transaksi')->where('transaksi.makanan_id',$id)
@@ -94,7 +98,12 @@ class PageController extends Controller
     public function makanan(){
         $data = menu_makanan_model::get();
 
-        return view('order',compact('data'));
+        // untuk makanan favoritnya saya ada kendala bingung manggil join dengan only trashednya pak.
+        // $fav = transaksi_model::where('transaksi.user_id','=',Auth::user()->id)
+        // ->onlyTrashed()
+        // ->get();
+
+        return view('order',['data'=>$data]);
     }
 
 
@@ -111,7 +120,8 @@ class PageController extends Controller
        $data= DB::table('transaksi')->where('transaksi.id',$id)->first();
 
        if($data->quantity-1 ==0){
-        DB::table('transaksi')->where('transaksi.id',$id)->delete();
+        // DB::table('transaksi')->where('transaksi.id',$id)->delete();
+        transaksi_model::where('transaksi.id','=',$id)->forcedelete();
        }
 
 
@@ -157,15 +167,15 @@ class PageController extends Controller
     public function updateprof(Request $request){
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'age' => ['required','integer','min:18'],
+            'age' => ['required','integer','gte:18'],
             'alamat' =>['required','string','max:255'],
             ]);
 
         DB::table('users')->where('users.id',Auth::user()->id)
         ->update([
-            'name' => $validated['name'],
-            'age' => $validated['age'],
-            'alamat' =>$validated['alamat'],
+            'name' => $request->name,
+            'age' => $request->age,
+            'alamat' =>$request->alamat,
         ]);
 
         return redirect('home')->with('update_success','Update Profile Success');
@@ -173,9 +183,11 @@ class PageController extends Controller
 
     public function kirim($id){
 
-        DB::table('transaksi')
-        ->where('transaksi.id',$id)
+        transaksi_model::where('transaksi.id','=',$id)
         ->delete();
+        // DB::table('transaksi')
+        // ->where()
+        // ->delete();
 
         return redirect('home')->with('kirim_success','Makanan Sudah Dikirim!');
     }
@@ -246,4 +258,5 @@ class PageController extends Controller
 
         return view('order',compact('data'));
     }
+
 }

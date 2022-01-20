@@ -26,7 +26,7 @@ Route::get('/insertmakanan', [App\Http\Controllers\PageController::class, 'show_
 
 Route::get('/updateprofile', [App\Http\Controllers\PageController::class, 'show_updateprof']);
 
-Route::post('/updated', [App\Http\Controllers\PageController::class, 'updateprof']);
+Route::post('/updated_prof', [App\Http\Controllers\PageController::class, 'updateprof']);
 
 Route::post('/inserted', [App\Http\Controllers\PageController::class, 'insert']);
 

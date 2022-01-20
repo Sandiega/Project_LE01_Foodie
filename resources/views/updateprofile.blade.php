@@ -8,7 +8,7 @@
                 <div class="card-header">{{ __('Update Profile') }}</div>
 
                 <div class="card-body">
-                    <form method="POST" action="/updated">
+                    <form method="POST" action="/updated_prof">
                         @csrf
 
                         <div class="row mb-3">
