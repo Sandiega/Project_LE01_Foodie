@@ -16,7 +16,7 @@ class Transaksi extends Migration
         Schema::create('transaksi', function (Blueprint $table) {
             $table->id();
             $table->foreignid('makanan_id')->references('id')->on('menu_makanan')->onDelete('cascade');
-            $table->foreignid('user_id')->references('id')->on('users');
+            $table->foreignid('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('quantity');
             $table->timestamps();
             $table->softDeletes();
